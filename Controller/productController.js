@@ -12,6 +12,16 @@ export const createProduct = async (req, res) => {
   }
 };
 
+// export const getProducts = async (req, res, next) => {
+//   try {
+//     const products = await ProductEcommerce.find();
+
+//     res.status(200).json(products);
+//   } catch (error) {
+//     next(createError(404, "Something went wrong"));
+//   }
+// };
+
 export const getProducts = async (req, res, next) => {
   const qNew = req.query.new;
   const qCategory = req.query.category;
@@ -27,7 +37,6 @@ export const getProducts = async (req, res, next) => {
     } else {
       products = await ProductEcommerce.find();
     }
-
     res.status(200).json(products);
   } catch (error) {
     next(createError(404, "Something went wrong"));

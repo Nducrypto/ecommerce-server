@@ -20,7 +20,7 @@ export const register = async (req, res, next) => {
       req.body.password,
       "secret"
     ).toString();
-    console.log(hashedPassword);
+
     const result = await UserEcommerce.create({
       email,
       password: hashedPassword,
@@ -29,7 +29,7 @@ export const register = async (req, res, next) => {
     });
 
     const token = jwt.sign(
-      { id: result._id, email: result.email },
+      { id: result._id, isAdmin: result.isAdmin },
       process.env.JWT_SECRET,
       {
         expiresIn: "1y",
@@ -70,6 +70,7 @@ export const login = async (req, res, next) => {
 
       { expiresIn: "1y" }
     );
+
     const { password, firstName, lastName, email, _id, isAdmin } =
       existingUser._doc;
 
