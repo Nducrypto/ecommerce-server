@@ -2,7 +2,6 @@ import ProductEcommerce from "../Models/productModel.js";
 import { createError } from "../Error/error.js";
 
 export const createProduct = async (req, res) => {
-  // console.log(req.body);
   const newProduct = new ProductEcommerce(req.body);
   try {
     const savedProduct = await newProduct.save();
@@ -11,16 +10,6 @@ export const createProduct = async (req, res) => {
     res.status(409).json({ message: error.message });
   }
 };
-
-// export const getProducts = async (req, res, next) => {
-//   try {
-//     const products = await ProductEcommerce.find();
-
-//     res.status(200).json(products);
-//   } catch (error) {
-//     next(createError(404, "Something went wrong"));
-//   }
-// };
 
 export const getProducts = async (req, res, next) => {
   const qNew = req.query.new;
@@ -54,8 +43,8 @@ export const getProduct = async (req, res, next) => {
 };
 
 export const updateProduct = async (req, res, next) => {
-  console.log(req.params);
-  console.log(req.body);
+  // console.log(req.params);
+  // console.log(req.body);
 
   try {
     const updatedProduct = await ProductEcommerce.findByIdAndUpdate(
