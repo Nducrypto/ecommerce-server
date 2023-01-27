@@ -86,7 +86,7 @@ export const orderStats = async (req, res, next) => {
         },
       },
     ]);
-    // console.log(income);
+
     res.status(200).json(income);
   } catch (err) {
     next(createError(404, "Something went wrong"));
