@@ -43,7 +43,7 @@ export const getProduct = async (req, res, next) => {
 };
 
 export const updateProduct = async (req, res, next) => {
-  // console.log(req.params);
+  console.log(req.params);
   // console.log(req.body);
 
   try {
