@@ -13,13 +13,12 @@ export const register = async (req, res, next) => {
 
   try {
     const existingUser = await UserEcommerce.findOne({ email });
-    console.log(existingUser);
 
     if (existingUser) return next(createError(404, "User alraedy exist."));
 
     const hashedPassword = CryptoJS.AES.encrypt(
       req.body.password,
-      "secret"
+      process.env.CRYPTO_JS
     ).toString();
 
     const result = await UserEcommerce.create({
@@ -53,14 +52,14 @@ export const register = async (req, res, next) => {
 export const login = async (req, res, next) => {
   try {
     const existingUser = await UserEcommerce.findOne({ email: req.body.email });
-    !existingUser && next(createError(404, "User doesn't exist."));
+    if (!existingUser) return next(createError(404, "User doesn't exist."));
     const hashedPassword = CryptoJS.AES.decrypt(
       existingUser.password,
-      "secret"
+      process.env.CRYPTO_JS
     );
     const originalPassword = hashedPassword.toString(CryptoJS.enc.Utf8);
-    originalPassword !== req.body.password &&
-      next(createError(400, "Invalid Email or Password."));
+    if (originalPassword !== req.body.password)
+      return next(createError(400, "Invalid Email or Password."));
     const token = jwt.sign(
       { isAdmin: existingUser.isAdmin, id: existingUser._id },
       process.env.JWT_SECRET,
