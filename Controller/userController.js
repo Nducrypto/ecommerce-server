@@ -10,6 +10,7 @@ dotenv.config();
 // SIGNUP
 export const register = async (req, res, next) => {
   const { email, password, firstName, lastName } = req.body;
+
   try {
     const existingUser = await UserEcommerce.findOne({ email });
     console.log(existingUser);
@@ -52,28 +53,21 @@ export const register = async (req, res, next) => {
 export const login = async (req, res, next) => {
   try {
     const existingUser = await UserEcommerce.findOne({ email: req.body.email });
-
     !existingUser && next(createError(404, "User doesn't exist."));
-
     const hashedPassword = CryptoJS.AES.decrypt(
       existingUser.password,
       "secret"
     );
-
     const originalPassword = hashedPassword.toString(CryptoJS.enc.Utf8);
     originalPassword !== req.body.password &&
       next(createError(400, "Invalid Email or Password."));
-
     const token = jwt.sign(
       { isAdmin: existingUser.isAdmin, id: existingUser._id },
       process.env.JWT_SECRET,
-
       { expiresIn: "1y" }
     );
-
     const { password, firstName, lastName, email, _id, isAdmin } =
       existingUser._doc;
-
     res
       .status(200)
       .json({ firstName, lastName, email, id: _id, isAdmin, token });
